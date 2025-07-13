@@ -1,0 +1,15 @@
+API_KEY = '' #API ключ openai
+BOT_TOKEN = '' #token от telegram бота
+
+DB_IP = '' #IP адрес базы данных
+DB_PASSWORD = '' #пароль от базы данных (остальные данные выставляются в config.py)
+
+PROXY_IP = '' #IP адрес proxy
+PROXY_PORT = 0 #Порт proxy
+PROXY_USER = '' #Логин proxy
+PROXY_PASS = '' #Пароль proxy
+
+EMAIL_HOSTNAME = '' #Hostname от почты
+EMAIL_PORT = 0 #Port от почты
+EMAIL_USERNAME = '' #Username от почты
+EMAIL_PASSWORD = '' #Пароль от почты
