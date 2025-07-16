@@ -4,7 +4,19 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from config import logger, EMAIL_PASSWORD, EMAIL_USERNAME, EMAIL_PORT, EMAIL_HOSTNAME
 
-async def send_email_register(to_email: str, code: str) -> bool:
+# async def send_email_register(to_email: str, code: str) -> bool:
+#     await send_mail(to_email, 
+#                     'data/mail.html', 
+#                     f"https://school-hub.ru/verify-email?token={code}",
+#                     'Подтверждение регистрации | school-hub.ru')
+    
+async def send_email_edit(to_email: str, code: str) -> bool:
+    await send_mail(to_email, 
+                    'data/mail.html', 
+                    f"https://online-postupishka.ru/verify-email?token={code}",
+                    'Изменение почты | school-hub.ru')
+
+async def send_mail(to_email: str, mail_path:str, url:str, title:str):
     smtp_config = {
         'hostname': EMAIL_HOSTNAME,
         'port': EMAIL_PORT,
@@ -14,7 +26,7 @@ async def send_email_register(to_email: str, code: str) -> bool:
     }
 
     try:
-        with open('data/mail.html', 'r', encoding='utf-8') as file:
+        with open(mail_path, 'r', encoding='utf-8') as file:
             html_template = file.read()
     except FileNotFoundError:
         logger.error("Ошибка: Шаблон письма не найден")
@@ -22,13 +34,13 @@ async def send_email_register(to_email: str, code: str) -> bool:
 
     html_content = html_template.replace(
         '{{confirmation_url}}',
-        f"https://online-postupishka.ru/verify-email?token={code}"
+        url
     )
 
     msg = MIMEMultipart('alternative')
     msg['From'] = smtp_config['username']
     msg['To'] = to_email
-    msg['Subject'] = 'Подтверждение регистрации | online-postupishka.ru'
+    msg['Subject'] = title
     msg.attach(MIMEText(html_content, 'html'))
 
     for attempt in range(3):

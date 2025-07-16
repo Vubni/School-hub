@@ -20,11 +20,7 @@ class UserProfileSchema(Schema):
     
     
 class UserEditSchema(Schema):
-    email = fields.Str(required=False, description="email пользователя. До 256 символов")
-    first_name = fields.Str(required=False)
-    password_old = fields.Str(required=False)
-    password_new = fields.Str(required=False)
-    
+    email = fields.Str(required=True, description="email пользователя. До 256 символов")
     
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""

@@ -7,7 +7,7 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (profile, auth)
+from api import (settings, auth)
 
 from database.functions import init_db
 
@@ -47,9 +47,9 @@ if __name__ == "__main__":
         web.post(prefix + 'auth', auth.auth),
         web.post(prefix + 'email', auth.email_verify),
         
-        web.get(prefix + 'profile', profile.profile_get),
-        web.patch(prefix + 'profile', profile.profile_patch),
-        web.delete(prefix + 'profile', profile.profile_delete),
+        web.get(prefix + 'settings/info', settings.info),
+        web.delete(prefix + 'settings/email/set', settings.set_email),
+        web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
         
         # web.get('/{path:.*}', handle_get_file)
     ]

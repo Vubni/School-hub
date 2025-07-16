@@ -13,35 +13,6 @@ from functions import mail
 
 @docs(
     tags=["Auth"],
-    summary="Регистрация пользователя",
-    description="Регистрация нового пользователя с указанием класса и контактов",
-    responses={
-        201: {"description": "Регистрация успешно выполнена", "schema": sh.TokenResponseSchema},
-        400: {"description": "Отсутствует один из параметров или ограничения параметра не выполнены", "schema": sh.Error400Schema},
-        409: {"description": "Логин или почта заняты", "schema": sh.AlreadyBeenTaken},
-        422: {"description": "Переданный email не соответствует стандартам электронной почты"},
-        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
-    }
-)
-@request_schema(sh.UserRegisterSchema)
-@validate.validate(validate.Register)
-async def register(request: web.Request, parsed : validate.Register) -> web.Response:
-    try:
-        email = parsed.email
-        first_name = parsed.first_name
-        password = parsed.password
-        
-        code = await func_db.register_user(email, password, first_name)
-        if not isinstance(code, str):
-            return code
-        await mail.send_email_register(email, code)
-        return web.json_response({"token": code}, status=201)
-    except Exception as e:
-        logger.error("register error: ", e)
-        return web.Response(status=500, text=str(e))
-
-@docs(
-    tags=["Auth"],
     summary="Авторизация пользователя",
     description="Получение токена авторизации",
     responses={

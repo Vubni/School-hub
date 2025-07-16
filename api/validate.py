@@ -88,10 +88,7 @@ class Auth(BaseModel):
         return v
     
 class Profile_patch(BaseModel):
-    email: Optional[str] = None
-    first_name : Optional[str] = None
-    password_old : Optional[str] = None
-    password_new : Optional[str] = None
+    email: str
     
     @field_validator('email')
     def check_email(cls, v):
@@ -100,14 +97,3 @@ class Profile_patch(BaseModel):
         if not core.is_valid_email(v):
             raise EmailError('Email does not comply with email standards or dns mail servers are not found')
         return v
-    
-    @model_validator(mode='after')
-    def check_others(self):
-        if self.password_new is not None and self.password_old is None:
-            raise ValueError('password_old is required if password_new is provided')
-        if self.password_old is not None and self.password_new is None:
-            raise ValueError('password_new is required if password_old is provided')
-        if all(value is None for value in self.model_dump().values()):
-            raise ValueError('At least one field must be provided')
-        return self
-    

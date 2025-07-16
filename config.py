@@ -13,7 +13,7 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 DATE_BASE_CONNECT = {"host": os.getenv("DB_IP"), 
              "user": "user", 
              "password": os.getenv("DB_PASSWORD"), 
-             "database": "postupishka"}
+             "database": "schoolhub"}
 
 
 
