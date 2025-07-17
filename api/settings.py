@@ -43,10 +43,45 @@ async def info(request: web.Request) -> web.Response:
     
 @docs(
     tags=["Settings"],
+    summary="Изменение логина",
+    description="Изменяет логин. Для доступа требуется Bearer-токен в заголовке Authorization",
+    responses={
+        204: {"description": "Логин успешно изменён"},
+        400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена"},
+        409: {"description": "Новые логин или почта заняты", "schema": sh.AlreadyBeenTaken},
+        422: {"description": "Переданный email не соответствует стандартам электронной почты"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    },
+    parameters=[{
+        'in': 'header',
+        'name': 'Authorization',
+        'schema': {'type': 'string', 'format': 'Bearer'},
+        'required': True,
+        'description': 'Bearer-токен для аутентификации'
+    }]
+)
+@request_schema(sh.UserEditSchema)
+@validate.validate(validate.Profile_patch)
+async def set_login(request: web.Request, parsed : validate.Profile_patch) -> web.Response:
+    try:
+        user_id = await core.check_authorization(request)
+        if not isinstance(user_id, str):
+            return user_id
+        
+        login_new = parsed.login
+        return await func.set_login(user_id, login_new)
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+    
+    
+@docs(
+    tags=["Settings"],
     summary="Изменение почты",
     description="Изменяет почту. Для доступа требуется Bearer-токен в заголовке Authorization",
     responses={
-        204: {"description": "Профиль успешно изменён"},
+        204: {"description": "Почта успешно изменена"},
         400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
         401: {"description": "Авторизация не выполнена"},
         409: {"description": "Новые логин или почта заняты", "schema": sh.AlreadyBeenTaken},

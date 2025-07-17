@@ -88,12 +88,10 @@ class Auth(BaseModel):
         return v
     
 class Profile_patch(BaseModel):
-    email: str
+    login: str
     
-    @field_validator('email')
+    @field_validator('login')
     def check_email(cls, v):
-        if len(v) > 256:
-            raise ValueError('Email cannot exceed 256 characters')
-        if not core.is_valid_email(v):
-            raise EmailError('Email does not comply with email standards or dns mail servers are not found')
+        if len(v) > 20:
+            raise ValueError('Login cannot exceed 20 characters')
         return v

@@ -48,8 +48,10 @@ if __name__ == "__main__":
         web.post(prefix + 'email', auth.email_verify),
         
         web.get(prefix + 'settings/info', settings.info),
-        web.delete(prefix + 'settings/email/set', settings.set_email),
-        web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
+        web.post(prefix + 'settings/login/set', settings.set_login),
+        # web.post(prefix + 'settings/password/set', settings.set_password),
+        web.post(prefix + 'settings/email/set', settings.set_email),
+        # web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
         
         # web.get('/{path:.*}', handle_get_file)
     ]

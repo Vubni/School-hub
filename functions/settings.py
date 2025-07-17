@@ -5,7 +5,7 @@ from core import generate_unique_code
 
 async def info(user_id:int):
     async with Database() as db:
-        res = await db.execute("SELECT login, email, name, surname, telegram_id FROM users WHERE id=$1", (user_id,))
+        res = await db.execute("SELECT login, email, name, surname, class_number, class_letter, telegram_id FROM users WHERE id=$1", (user_id,))
     return res
 
 async def set_login(user_id:int, loign_new:str):

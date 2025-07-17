@@ -14,13 +14,17 @@ class UserAuthSchema(Schema):
 
 
 class UserProfileSchema(Schema):
+    login = fields.Str()
     email = fields.Str()
-    first_name = fields.Str()
-    verified = fields.Bool(description="Верифицирован ли аккаунт")
+    name = fields.Str()
+    surname = fields.Str()
+    class_number = fields.Int()
+    class_letter = fields.Str()
+    telegram_name = fields.Str()
     
     
 class UserEditSchema(Schema):
-    email = fields.Str(required=True, description="email пользователя. До 256 символов")
+    login = fields.Str(required=True, description="login пользователя. До 20 символов")
     
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""

@@ -18,8 +18,11 @@ async def init_db():
                     email character varying COLLATE pg_catalog."default",
                     name character varying COLLATE pg_catalog."default" NOT NULL,
                     surname character varying COLLATE pg_catalog."default" NOT NULL,
+                    class_number integer NOT NULL,
+                    class_letter "char" NOT NULL,
                     password character varying COLLATE pg_catalog."default" NOT NULL,
-                    telegram_id bigint NOT NULL,
+                    telegram_id bigint,
+                    login character varying(20) COLLATE pg_catalog."default" NOT NULL,
                     CONSTRAINT users_pkey PRIMARY KEY (id),
                     CONSTRAINT users_email_key UNIQUE (email)
                 )""")
