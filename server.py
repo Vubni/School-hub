@@ -47,6 +47,8 @@ if __name__ == "__main__":
         web.post(prefix + 'auth', auth.auth),
         web.post(prefix + 'email', auth.email_verify),
         
+        # web.get(prefix + 'schedule', settings.info),
+
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),
         # web.post(prefix + 'settings/password/set', settings.set_password),
