@@ -11,8 +11,7 @@ class TokenResponseSchema(Schema):
 class UserAuthSchema(Schema):
     identifier = fields.Str(required=True)
     password = fields.Str(required=True)
-
-
+    
 class UserProfileSchema(Schema):
     login = fields.Str()
     email = fields.Str()
@@ -22,9 +21,18 @@ class UserProfileSchema(Schema):
     class_letter = fields.Str()
     telegram_name = fields.Str()
     
-    
-class UserEditSchema(Schema):
+class LoginEditSchema(Schema):
     login = fields.Str(required=True, description="login пользователя. До 20 символов")
+    
+class EmailEditSchema(Schema):
+    email = fields.Str(required=True, description="email пользователя. До 256 символов")
+    
+class PasswordEditSchema(Schema):
+    password = fields.Str(required=True, description="password пользователя.")
+    
+class TelegramConnectSchema(Schema):
+    url = fields.Str(required=True, description="Ссылка для привязки аккаунта Telegram.")
+    
     
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""

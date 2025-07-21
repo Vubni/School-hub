@@ -63,19 +63,6 @@ def validate(model: type[T]) -> Callable:
     return decorator
 
 
-
-class Register(BaseModel):
-    email: str
-    first_name : str
-    password : str
-    
-    @field_validator('email')
-    def check_email(cls, v):
-        if len(v) > 256:
-            raise ValueError('Email cannot exceed 256 characters')
-        if not core.is_valid_email(v):
-            raise EmailError('Email does not comply with email standards or dns mail servers are not found')
-        return v
     
 class Auth(BaseModel):
     identifier: str
@@ -87,7 +74,7 @@ class Auth(BaseModel):
             raise ValueError('Identifier cannot exceed 256 characters')
         return v
     
-class Profile_patch(BaseModel):
+class Login_patch(BaseModel):
     login: str
     
     @field_validator('login')
@@ -95,3 +82,17 @@ class Profile_patch(BaseModel):
         if len(v) > 20:
             raise ValueError('Login cannot exceed 20 characters')
         return v
+    
+class Email_patch(BaseModel):
+    email: str
+    
+    @field_validator('email')
+    def check_email(cls, v):
+        if len(v) > 256:
+            raise ValueError('Email cannot exceed 256 characters')
+        if not core.is_valid_email(v):
+            raise EmailError('Email does not comply with email standards or dns mail servers are not found')
+        return v
+    
+class Password_patch(BaseModel):
+    password: str
