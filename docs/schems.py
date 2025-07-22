@@ -1,10 +1,5 @@
 from marshmallow import Schema, fields
 
-class UserRegisterSchema(Schema):
-    email = fields.Str(required=True, description="email пользователя. До 256 символов")
-    first_name = fields.Str(required=True)
-    password = fields.Str(required=True)
-
 class TokenResponseSchema(Schema):
     token = fields.Str(description="Токен для взаимодействия с аккаунтом")
 
