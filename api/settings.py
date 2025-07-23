@@ -30,7 +30,7 @@ from api import validate
 async def info(request: web.Request) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         res = await func.info(user_id)
@@ -66,7 +66,7 @@ async def info(request: web.Request) -> web.Response:
 async def set_login(request: web.Request, parsed : validate.Login_patch) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         login_new = parsed.login
@@ -101,7 +101,7 @@ async def set_login(request: web.Request, parsed : validate.Login_patch) -> web.
 async def set_email(request: web.Request, parsed : validate.Email_patch) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         email_new = parsed.email
@@ -135,7 +135,7 @@ async def set_email(request: web.Request, parsed : validate.Email_patch) -> web.
 async def set_password(request: web.Request, parsed : validate.Password_patch) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         password = parsed.password
@@ -168,7 +168,7 @@ async def set_password(request: web.Request, parsed : validate.Password_patch) -
 async def telegram_out(request: web.Request) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         # return await func.telegram_out(user_id)
@@ -199,7 +199,7 @@ async def telegram_out(request: web.Request) -> web.Response:
 async def telegram_connect(request: web.Request) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
-        if not isinstance(user_id, str):
+        if not isinstance(user_id, int):
             return user_id
         
         # return await func.telegram_sign(user_id)

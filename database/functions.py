@@ -6,7 +6,7 @@ async def check_token(token):
         res = await db.execute("SELECT user_id FROM tokens WHERE token=$1", (token,))
         if not res:
             return web.Response(status=401, text="Invalid token")
-    return res["email"]
+    return int(res["user_id"])
 
 async def init_db():
     async with Database() as db:
