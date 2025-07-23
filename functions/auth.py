@@ -36,10 +36,10 @@ async def verify_email(email):
             
 async def auth(identifier:str, password:str) -> str:
     async with Database() as db:
-        res = await db.execute("SELECT email FROM users WHERE (email = $1 or login = $1) AND password=$2", (identifier, password))
+        res = await db.execute("SELECT id FROM users WHERE (email = $1 or login = $1) AND password=$2", (identifier, password))
         if not res:
             return web.Response(status=401, text="The login information is incorrect")
-        email = res["email"]
+        user_id = res["id"]
         code = generate_unique_code()
-        await db.execute("INSERT INTO tokens (email, token) VALUES ($1, $2)", (email, code,))
+        await db.execute("INSERT INTO tokens (user_id, token) VALUES ($1, $2)", (user_id, code,))
     return web.json_response({"token": code}, status=200)
