@@ -28,10 +28,15 @@ class PasswordEditSchema(Schema):
 class TelegramConnectSchema(Schema):
     url = fields.Str(required=True, description="Ссылка для привязки аккаунта Telegram.")
     
-    
+
 class ScheduleGetSchema(Schema):
     date = fields.Date(required=True, description="Дата на которую получают расписание.")
     
+class ClubsListSchema(Schema):
+    type = fields.Str(default="my")
+    offset = fields.Int(default=0)
+    limit = fields.Int(default=100)
+
 class ScheduleItemSchema(Schema):
     start_time = fields.Str(required=True, description="Время начала урока в формате ЧЧ:ММ")
     stop_time = fields.Str(required=True, description="Время окончания урока в формате ЧЧ:ММ")

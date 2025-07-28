@@ -101,3 +101,8 @@ class Password_patch(BaseModel):
 class Schedule_get(BaseModel):
     date: date
     
+class Clubs_list(BaseModel):
+    type: str = "my"
+    offset: int = 0
+    limit: int = 100
+    

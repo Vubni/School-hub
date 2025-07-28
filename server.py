@@ -7,7 +7,7 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (auth, settings, schedule)
+from api import (auth, settings, schedule, clubs)
 
 from database.functions import init_db
 
@@ -49,11 +49,11 @@ if __name__ == "__main__":
         
         web.get(prefix + 'schedule', schedule.info),
         
-        # web.get(prefix + 'club/list', club.info),
-        # web.get(prefix + 'club/get', club.info),
-        # web.post(prefix + 'club/new', club.info),
-        # web.patch(prefix + 'club/edit', club.info),
-        # web.delete(prefix + 'club/del', club.info),
+        # web.get(prefix + 'clubs/list', clubs.info),
+        # web.get(prefix + 'clubs/get', clubs.info),
+        # web.post(prefix + 'clubs/new', clubs.info),
+        # web.patch(prefix + 'clubs/edit', clubs.info),
+        # web.delete(prefix + 'clubs/del', clubs.info),
 
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),
