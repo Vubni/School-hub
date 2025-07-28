@@ -48,6 +48,12 @@ if __name__ == "__main__":
         web.post(prefix + 'email', auth.email_verify),
         
         web.get(prefix + 'schedule', schedule.info),
+        
+        # web.get(prefix + 'club/list', club.info),
+        # web.get(prefix + 'club/get', club.info),
+        # web.post(prefix + 'club/new', club.info),
+        # web.patch(prefix + 'club/edit', club.info),
+        # web.delete(prefix + 'club/del', club.info),
 
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),
