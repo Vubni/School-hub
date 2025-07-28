@@ -29,6 +29,32 @@ class TelegramConnectSchema(Schema):
     url = fields.Str(required=True, description="Ссылка для привязки аккаунта Telegram.")
     
     
+class ScheduleGetSchema(Schema):
+    date = fields.Date(required=True, description="Дата на которую получают расписание.")
+    
+class ScheduleItemSchema(Schema):
+    start_time = fields.Str(required=True, description="Время начала урока в формате ЧЧ:ММ")
+    stop_time = fields.Str(required=True, description="Время окончания урока в формате ЧЧ:ММ")
+    lesson_number = fields.Int(required=True, description="Порядковый номер урока")
+    title = fields.Str(
+        required=False, 
+        allow_none=True, 
+        description="Название урока (присутствует только если урок запланирован)"
+    )
+    classrooms = fields.List(
+        fields.Raw(), 
+        required=False, 
+        allow_none=True, 
+        description="Список кабинетов (строки/числа) или None"
+    )
+    teachers = fields.List(
+        fields.Str(), 
+        required=False, 
+        allow_none=True, 
+        description="Список преподавателей (строки) или None"
+    )
+    
+    
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""
     name = fields.Str(description="Имя параметра, вызвавшего ошибку")

@@ -7,7 +7,7 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (settings, auth)
+from api import (auth, settings, schedule)
 
 from database.functions import init_db
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         web.post(prefix + 'auth', auth.auth),
         web.post(prefix + 'email', auth.email_verify),
         
-        # web.get(prefix + 'schedule', settings.info),
+        web.get(prefix + 'schedule', schedule.info),
 
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),

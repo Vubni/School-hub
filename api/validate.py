@@ -5,6 +5,7 @@ import json
 from aiohttp import web
 from pydantic import field_validator, model_validator
 import core
+from datetime import date
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -96,3 +97,7 @@ class Email_patch(BaseModel):
     
 class Password_patch(BaseModel):
     password: str
+    
+class Schedule_get(BaseModel):
+    date: date
+    
