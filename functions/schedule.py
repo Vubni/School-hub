@@ -14,11 +14,15 @@ async def info(user_id: int, date: date) -> dict:
         schedule = []
         
         async with Database() as db:
+            user = await db.execute("SELECT * FROM users WHERE id = $1", (user_id,))
+            
             lesson_times = await db.execute_all("SELECT * FROM lesson_time WHERE day_number = $1", (date.weekday()+1,))
             lesson_times_special = await db.execute_all("SELECT * FROM lesson_time_special WHERE date = $1", (date,))
             
-            lessons = await db.execute_all("SELECT * FROM lessons WHERE day_number = $1", (date.weekday()+1,))
-            lesson_substitutions = await db.execute_all("SELECT * FROM lesson_substitutions WHERE date = $1", (date,))
+            lessons = await db.execute_all("SELECT * FROM lessons WHERE day_number = $1 AND class_number = $2 AND class_letter = $3", 
+                                           (date.weekday()+1, user['class_number'], user['class_letter']))
+            lesson_substitutions = await db.execute_all("SELECT * FROM lesson_substitutions WHERE date = $1 AND class_number = $2 AND class_letter = $3", 
+                                                        (date, user['class_number'], user['class_letter']))
             
         for lesson_time in lesson_times:
             for lesson_time_special in lesson_times_special:
