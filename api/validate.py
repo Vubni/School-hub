@@ -99,7 +99,7 @@ class Password_patch(BaseModel):
     password: str
     
 class Schedule_get(BaseModel):
-    date: date
+    date: str
     
 class Clubs_list(BaseModel):
     type: str = "my"

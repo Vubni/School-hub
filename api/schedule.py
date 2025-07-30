@@ -9,6 +9,8 @@ from docs import schems as sh
 from functions import schedule as func
 import core
 from api import validate
+from dateutil import parser
+from datetime import date
 
 @docs(
     tags=["Schedule"],
@@ -36,7 +38,14 @@ async def info(request: web.Request, parsed : validate.Schedule_get) -> web.Resp
         if not isinstance(user_id, int):
             return user_id
         
-        res = await func.info(user_id, parsed.date)
+        try:
+            current_date = parser.parse(parsed.date).date()
+        except ValueError:
+            return web.json_response({
+                "error": "Invalid date format",
+                "received_date": parsed.date
+            }, status=400)
+        res = await func.info(user_id, current_date)
         
         return web.json_response(res, status=200)
     except Exception as e:
