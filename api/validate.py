@@ -106,3 +106,5 @@ class Clubs_list(BaseModel):
     offset: int = 0
     limit: int = 100
     
+class Club_info(BaseModel):
+    club_id: int

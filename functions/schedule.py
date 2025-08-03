@@ -35,10 +35,10 @@ async def info(user_id: int, date: date) -> dict:
                 index = next((idx for idx, d in enumerate(lessons) if d.get('lesson_number') == lesson_time['lesson_number']), None)
                 if index is not None:
                     lesson_time.update(lessons[index])
+                    lesson_time["replacement"] = False
             else:
                 lesson_time["replacement"] = True
                 lesson_time.update(lesson_substitutions[index])
-            lesson_time["replacement"] = False
             
             lesson_time.pop('id', None), lesson_time.pop('day_number', None), lesson_time.pop('date', None)
             lesson_time.pop('class_number', None), lesson_time.pop('class_letter', None)
