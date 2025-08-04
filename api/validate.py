@@ -108,3 +108,64 @@ class Clubs_list(BaseModel):
     
 class Club_info(BaseModel):
     club_id: int
+    
+class Club_new(BaseModel):
+    title: str
+    description: str
+    administration: int
+    max_members_counts: Optional[int] = 0
+    class_limit_min: Optional[int] = 1
+    class_limit_max: Optional[int] = 11
+    telegram_url: Optional[str] = None  # Явно указываем Optional
+    
+    @field_validator('class_limit_max')
+    def validate_telegram_url(cls, v):
+        if 1 <= v <= 11:
+            return v
+        raise ValueError("class_limit_max in 1-11")
+    
+    @field_validator('class_limit_min')
+    def validate_telegram_url(cls, v):
+        if 1 <= v <= 11:
+            return v
+        raise ValueError("class_limit_min in 1-11")
+    
+    @field_validator('max_members_counts')
+    def validate_telegram_url(cls, v):
+        if 0 < v < 4:
+            return v
+        raise ValueError("max_members_counts is 4+ or 0")
+        
+
+    @field_validator('telegram_url')
+    def validate_telegram_url(cls, v):
+        # Если значение не указано - пропускаем проверку
+        if v is None:
+            return v
+        
+        # Проверяем, что ссылка начинается с допустимых префиксов
+        valid_prefixes = (
+            "https://t.me/", 
+            "http://t.me/",
+            "https://telegram.me/",
+            "http://telegram.me/"
+        )
+        
+        if not any(v.startswith(prefix) for prefix in valid_prefixes):
+            raise ValueError(
+                "Telegram URL must start with: "
+                "https://t.me/, http://t.me/, "
+                "https://telegram.me/ or http://telegram.me/"
+            )
+        
+        # Дополнительная проверка на минимальную длину
+        if len(v) < 15:
+            raise ValueError("Telegram URL is too short")
+            
+        return v
+    
+class Check_title(BaseModel):
+    title: str
+    
+class Club_join(BaseModel):
+    club_id: int

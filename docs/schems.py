@@ -38,7 +38,23 @@ class ClubsListSchema(Schema):
     limit = fields.Int(default=100)
     
 class ClubGetSchema(Schema):
-    club_id = fields.Int()
+    club_id = fields.Int(required=True, description="id клуба")
+    
+class ClubNewSchema(Schema):
+    title = fields.Str(required=True, description="Название клуба. До 20 символов")
+    description = fields.Str(required=True, description="Описание клуба. До 200 символов")
+    administration = fields.Int(required=True, description="Направление клуба (ответственное министерство)")
+    max_members_counts = fields.Int(required=True, description="Максимальное количество участников клуба", default=0)
+    class_limit_min = fields.Int(required=True, description="Минимальный класс для участия в клубе", default=1)
+    class_limit_max = fields.Int(required=True, description="Максимальный класс для участия в клубе", default=11)
+    telegram_url = fields.Str(required=True, description="URL телеграм-канала клуба")
+    
+class CheckTitleSchema(Schema):
+    title = fields.Str(required=True, description="Название клуба")
+    
+class AdministrationListSchema(Schema):
+    id = fields.Int()
+    title = fields.Str()
 
 class ScheduleItemSchema(Schema):
     start_time = fields.Str(required=True, description="Время начала урока в формате ЧЧ:ММ")
@@ -64,27 +80,31 @@ class ScheduleItemSchema(Schema):
     
 class ClubSchema(Schema):
     id = fields.Int(required=True, description="ID клуба")
-    name = fields.Str(required=True, description="Название клуба")
+    title = fields.Str(required=True, description="Название клуба")
     members_count = fields.Int(required=True, description="Количество участников клуба")
-    max_members_count = fields.Int(required=True, description="Максимальное количество участников клуба")
-    administration = fields.Str(required=True, description="Направление клуба (ответственное министерство)")
+    max_members_counts = fields.Int(required=True, description="Максимальное количество участников клуба")
     class_limit_min = fields.Int(required=True, description="Минимальный класс для участия в клубе")
     class_limit_max = fields.Int(required=True, description="Максимальный класс для участия в клубе")
     
     
 class ClubGetReturnSchema(Schema):
     id = fields.Int(required=True, description="ID клуба")
-    name = fields.Str(required=True, description="Название клуба")
+    title = fields.Str(required=True, description="Название клуба")
     description = fields.Str(required=True, description="Описание клуба")
     telegram_url = fields.Str(required=True, description="Ссылка на Telegram-канал/группу клуба")
     xp = fields.Int(required=True, description="Текущий опыт клуба")
     members_count = fields.Int(required=True, description="Количество участников клуба")
-    max_members_count = fields.Int(required=True, description="Максимальное количество участников клуба")
+    max_members_counts = fields.Int(required=True, description="Максимальное количество участников клуба")
     administration = fields.Int(required=True, description="Направление клуба (ответственное министерство)")
     class_limit_min = fields.Int(required=True, description="Минимальный класс для участия в клубе")
     class_limit_max = fields.Int(required=True, description="Максимальный класс для участия в клубе")
+    participant = fields.Bool(required=True, description="Является ли пользователь участником клуба")
     admin = fields.Bool(required=True, description="Является ли пользователь администратором клубa")
 
+    
+class ClubJoinSchema(Schema):
+    club_id = fields.Int(required=True, description="id клуба")
+    
     
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""

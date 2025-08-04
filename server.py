@@ -51,7 +51,11 @@ if __name__ == "__main__":
         
         web.get(prefix + 'clubs/list', clubs.info),
         web.get(prefix + 'clubs/get', clubs.get),
-        # web.post(prefix + 'clubs/new', clubs.info),
+        web.get(prefix + 'clubs/administrations', clubs.administrations),
+        web.post(prefix + 'clubs/new', clubs.new),
+        web.post(prefix + 'clubs/check_title', clubs.check_title),
+        web.post(prefix + 'clubs/join', clubs.join_club),
+        web.post(prefix + 'clubs/leave', clubs.leave_club),
         # web.patch(prefix + 'clubs/edit', clubs.info),
         # web.delete(prefix + 'clubs/del', clubs.info),
 
