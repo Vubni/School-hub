@@ -273,11 +273,11 @@ async def leave_club(request: web.Request, parsed : validate.Club_join) -> web.R
 @docs(
     tags=["Clubs"],
     summary="Удалить клуб",
-    description="Удалить клуб\nДля доступа требуется Bearer-токен в заголовке Authorization",
+    description="Удалить клуб\nУдалить клуб может только участник с переменной admin=true (то есть админ)\nДля доступа требуется Bearer-токен в заголовке Authorization",
     responses={
         200: {"description": "Удалить клуб", "schema": sh.ClubGetReturnSchema},
         400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
-        401: {"description": "Авторизация не выполнена"},
+        401: {"description": "Авторизация не выполнена или авторизация выполнена от участника клуба не являющегося админом"},
         403: {"description": "Единственный администратор не может покинуть клуб."},
         500: {"description": "Server-side error (Ошибка на стороне сервера)"}
     },
