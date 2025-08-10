@@ -169,3 +169,6 @@ class Check_title(BaseModel):
     
 class Club_join(BaseModel):
     club_id: int
+
+class Club_delete(BaseModel):
+    club_id: int

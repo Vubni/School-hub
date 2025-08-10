@@ -231,3 +231,17 @@ async def leave_club(user_id: int, club_id: int) -> dict:
             "status": "error",
             "message": str(e)
         }
+    
+async def delete(user_id, club_id):
+    try:
+        async with Database() as db:
+            res = await db.execute("SELECT 1 FROM users WHERE user_id=$1 and admin=true", (user_id,))
+            if not res:
+                return web.json_response({"name": "user_id", "message": "User is not admin."}, status=401)
+            await db.execute("DELETE FROM clubs WHERE club_id=$1", (club_id,))
+        return web.Response(status=200)
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
