@@ -289,15 +289,17 @@ async def leave_club(request: web.Request, parsed : validate.Club_join) -> web.R
         'description': 'Bearer-токен для аутентификации'
     }]
 )
-@request_schema(sh.ClubJoinSchema)
-@validate.validate(validate.Club_delete)
-async def edit(request: web.Request, parsed : validate.Club_delete) -> web.Response:
+@request_schema(sh.ClubEditSchema)
+@validate.validate(validate.Club_edit)
+async def edit(request: web.Request, parsed : validate.Club_edit) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
         if not isinstance(user_id, int):
             return user_id
         
-        result = await func.edit(user_id, parsed.club_id)
+        result = await func.edit(user_id, parsed.club_id, parsed.title,
+                                   parsed.description, parsed.max_members_counts, parsed.class_limit_min,
+                                   parsed.class_limit_max, parsed.telegram_url)
         
         if isinstance(result, dict):
             return web.json_response(result, status=200)
@@ -327,17 +329,15 @@ async def edit(request: web.Request, parsed : validate.Club_delete) -> web.Respo
         'description': 'Bearer-токен для аутентификации'
     }]
 )
-@request_schema(sh.ClubEditSchema)
-@validate.validate(validate.Club_edit)
-async def delete(request: web.Request, parsed : validate.Club_edit) -> web.Response:
+@request_schema(sh.ClubJoinSchema)
+@validate.validate(validate.Club_delete)
+async def delete(request: web.Request, parsed : validate.Club_delete) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
         if not isinstance(user_id, int):
             return user_id
         
-        result = await func.edit(user_id, parsed.club_id, parsed.title,
-                                   parsed.description, parsed.max_members_counts, parsed.class_limit_min,
-                                   parsed.class_limit_max, parsed.telegram_url)
+        result = await func.delete(user_id, parsed.club_id)
         
         if isinstance(result, dict):
             return web.json_response(result, status=200)
@@ -346,3 +346,4 @@ async def delete(request: web.Request, parsed : validate.Club_edit) -> web.Respo
     except Exception as e:
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
+    
