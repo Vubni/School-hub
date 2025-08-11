@@ -36,6 +36,8 @@ async def info(user_id: int, date: date) -> dict:
                 if index is not None:
                     lesson_time.update(lessons[index])
                     lesson_time["replacement"] = False
+                else:
+                    continue
             else:
                 lesson_time["replacement"] = True
                 lesson_time.update(lesson_substitutions[index])
