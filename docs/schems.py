@@ -104,6 +104,15 @@ class ClubGetReturnSchema(Schema):
     
 class ClubJoinSchema(Schema):
     club_id = fields.Int(required=True, description="id клуба")
+
+class ClubEditSchema(Schema):
+    club_id = fields.Int(required=True, description="id клуба")
+    title = fields.Str(required=True, description="Название клуба")
+    description = fields.Str(required=True, description="Описание клуба")
+    max_members_counts = fields.Int(required=True, description="Максимальное количество участников в клубе")
+    class_limit_min = fields.Int(required=True, description="Минимальный класс для участия в клубе")
+    class_limit_max = fields.Int(required=True, description="Максимальный класс для участия в клубе")
+    telegram_url = fields.Str(required=True, description="Telegram ссылка на канал/группу клуба")
     
     
 class ErrorDetailSchema(Schema):

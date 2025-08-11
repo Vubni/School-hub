@@ -56,7 +56,7 @@ if __name__ == "__main__":
         web.post(prefix + 'clubs/check_title', clubs.check_title),
         web.post(prefix + 'clubs/join', clubs.join_club),
         web.post(prefix + 'clubs/leave', clubs.leave_club),
-        # web.patch(prefix + 'clubs/edit', clubs.info),
+        # web.patch(prefix + 'clubs/edit', clubs.edit),
         web.delete(prefix + 'clubs/del', clubs.delete),
 
         web.get(prefix + 'settings/info', settings.info),

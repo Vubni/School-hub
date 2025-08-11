@@ -272,6 +272,44 @@ async def leave_club(request: web.Request, parsed : validate.Club_join) -> web.R
 
 @docs(
     tags=["Clubs"],
+    summary="Изменить клуб",
+    description="Изменить клуб\nДля доступа требуется Bearer-токен в заголовке Authorization",
+    responses={
+        200: {"description": "Изменить клуб", "schema": sh.ClubGetReturnSchema},
+        400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена или авторизация выполнена от участника клуба не являющегося админом"},
+        403: {"description": "Единственный администратор не может покинуть клуб."},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    },
+    parameters=[{
+        'in': 'header',
+        'name': 'Authorization',
+        'schema': {'type': 'string', 'format': 'Bearer'},
+        'required': True,
+        'description': 'Bearer-токен для аутентификации'
+    }]
+)
+@request_schema(sh.ClubJoinSchema)
+@validate.validate(validate.Club_delete)
+async def edit(request: web.Request, parsed : validate.Club_delete) -> web.Response:
+    try:
+        user_id = await core.check_authorization(request)
+        if not isinstance(user_id, int):
+            return user_id
+        
+        result = await func.edit(user_id, parsed.club_id)
+        
+        if isinstance(result, dict):
+            return web.json_response(result, status=200)
+        else:
+            return result
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+
+
+@docs(
+    tags=["Clubs"],
     summary="Удалить клуб",
     description="Удалить клуб\nУдалить клуб может только участник с переменной admin=true (то есть админ)\nДля доступа требуется Bearer-токен в заголовке Authorization",
     responses={
@@ -289,15 +327,17 @@ async def leave_club(request: web.Request, parsed : validate.Club_join) -> web.R
         'description': 'Bearer-токен для аутентификации'
     }]
 )
-@request_schema(sh.ClubJoinSchema)
-@validate.validate(validate.Club_delete)
-async def delete(request: web.Request, parsed : validate.Club_delete) -> web.Response:
+@request_schema(sh.ClubEditSchema)
+@validate.validate(validate.Club_edit)
+async def delete(request: web.Request, parsed : validate.Club_edit) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
         if not isinstance(user_id, int):
             return user_id
         
-        result = await func.delete(user_id, parsed.club_id)
+        result = await func.edit(user_id, parsed.club_id, parsed.title,
+                                   parsed.description, parsed.max_members_counts, parsed.class_limit_min,
+                                   parsed.class_limit_max, parsed.telegram_url)
         
         if isinstance(result, dict):
             return web.json_response(result, status=200)

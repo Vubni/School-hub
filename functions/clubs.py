@@ -87,6 +87,7 @@ async def get(user_id: int, club_id: int) -> dict:
                 club["admin"] = is_participant["admin"]
             else:
                 club["participant"] = False
+                club["admin"] = False
                 del club["telegram_url"]
             res = await db.execute("SELECT title FROM administrations WHERE id = $1", (club["administration"],))
             club["administration"] = res['title'] if res else "Unknown"
@@ -239,6 +240,38 @@ async def delete(user_id, club_id):
             if not res:
                 return web.json_response({"name": "user_id", "message": "User is not admin."}, status=401)
             await db.execute("DELETE FROM clubs WHERE club_id=$1", (club_id,))
+        return web.Response(status=200)
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+    
+async def edit(user_id, club_id, title, description, max_members_counts, class_limit_min, class_limit_max, telegram_url):
+    try:
+        async with Database() as db:
+            res = await db.execute("SELECT 1 FROM users WHERE user_id=$1 and admin=true", (user_id,))
+            if not res:
+                return web.json_response({"name": "user_id", "message": "User is not admin."}, status=401)
+            if title:
+                await db.execute("UPDATE clubs SET title=$2 WHERE id=$1", (club_id, title))
+            if description:
+                await db.execute("UPDATE clubs SET description=$2 WHERE id=$1", (club_id, description))
+            if max_members_counts:
+                await db.execute("UPDATE clubs SET max_members_counts=$2 WHERE id=$1", (club_id, max_members_counts))
+            if class_limit_min:
+                await db.execute("UPDATE clubs SET class_limit_min=$2 WHERE id=$1", (club_id, class_limit_min))
+            if class_limit_max:
+                await db.execute("UPDATE clubs SET class_limit_max=$2 WHERE id=$1", (club_id, class_limit_max))
+            if telegram_url:
+                await db.execute("UPDATE clubs SET telegram_url=$2 WHERE id=$1", (club_id, telegram_url))
+
+            club = await db.execute("SELECT * FROM clubs WHERE id = $1", (club_id,))
+            res = await db.execute("SELECT title FROM administrations WHERE id = $1", (club["administration"],))
+            club["administration"] = res['title'] if res else "Unknown"
+            members_count = (await db.execute("SELECT COUNT(*) as count FROM club_members WHERE club_id=$1", (club_id,)))["count"]
+            club["members_count"] = members_count
+            return club
         return web.Response(status=200)
     except Exception as e:
         return {
