@@ -278,3 +278,19 @@ async def edit(user_id, club_id, title, description, max_members_counts, class_l
             "status": "error",
             "message": str(e)
         }
+    
+
+async def achievements_global():
+    try:
+        async with Database() as db:
+            achievements = await db.execute_all("SELECT title, description, xp FROM achievements WHERE global=true")
+            xp_all = (await db.execute("SELECT SUM(xp) AS total_xp FROM clubs"))["total_xp"]
+        for a in achievements:
+            a["need_xp"] = a["xp"]
+            a["xp"] = xp_all
+        return achievements
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }

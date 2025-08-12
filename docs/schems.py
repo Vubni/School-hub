@@ -114,6 +114,14 @@ class ClubEditSchema(Schema):
     class_limit_max = fields.Int(required=True, description="Максимальный класс для участия в клубе")
     telegram_url = fields.Str(required=True, description="Telegram ссылка на канал/группу клуба")
     
+
+class AchievementsGlobalReturnSchema(Schema):
+    title = fields.Str(description="Название достижения")
+    description = fields.Str(description="Описание достижения")
+    xp = fields.Str(description="Текущий набранный опыт")
+    need_xp = fields.Str(description="Необходимый опыт")
+
+
     
 class ErrorDetailSchema(Schema):
     """Схема для детального описания одной ошибки."""

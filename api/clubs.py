@@ -347,3 +347,40 @@ async def delete(request: web.Request, parsed : validate.Club_delete) -> web.Res
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
     
+
+
+@docs(
+    tags=["Clubs"],
+    summary="Глобальные достижение для клубов",
+    description="Глобальные достижения для клубов, прогресс складывается из опыта всех клубов.\nДля доступа требуется Bearer-токен в заголовке Authorization",
+    responses={
+        200: {"description": "Глобальные достижения клубов", "schema": sh.AchievementsGlobalReturnSchema(many=True)},
+        400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена или авторизация выполнена от участника клуба не являющегося админом"},
+        403: {"description": "Единственный администратор не может покинуть клуб."},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    },
+    parameters=[{
+        'in': 'header',
+        'name': 'Authorization',
+        'schema': {'type': 'string', 'format': 'Bearer'},
+        'required': True,
+        'description': 'Bearer-токен для аутентификации'
+    }]
+)
+async def achievements_global(request: web.Request) -> web.Response:
+    try:
+        user_id = await core.check_authorization(request)
+        if not isinstance(user_id, int):
+            return user_id
+        
+        result = await func.achievements_global()
+        
+        if isinstance(result, list):
+            return web.json_response(result, status=200)
+        else:
+            return result
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+    

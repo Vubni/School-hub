@@ -59,6 +59,15 @@ if __name__ == "__main__":
         web.patch(prefix + 'clubs/edit', clubs.edit),
         web.delete(prefix + 'clubs/del', clubs.delete),
 
+        # web.get(prefix + 'clubs/office/list', clubs.office_list),
+        # web.post(prefix + 'clubs/office/occupy', clubs.office_occupy),
+        # web.get(prefix + 'clubs/office/my', clubs.office_my),
+        # web.delete(prefix + 'clubs/office/free', clubs.office_free),
+
+
+        web.get(prefix + "achievement/global", clubs.achievements_global),
+        # web.get(prefix + "achievement/local", clubs.achievement_local),
+
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),
         web.post(prefix + 'settings/password/set', settings.set_password),
