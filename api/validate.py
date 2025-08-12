@@ -179,6 +179,9 @@ class Club_join(BaseModel):
 class Club_delete(BaseModel):
     club_id: int
 
+class Achievements_local(BaseModel):
+    club_id: int
+
 class Club_edit(BaseModel):
     club_id: int
     title: Optional[str] = None

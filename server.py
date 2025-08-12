@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
 
         web.get(prefix + "achievement/global", clubs.achievements_global),
-        # web.get(prefix + "achievement/local", clubs.achievement_local),
+        web.get(prefix + "achievement/local", clubs.achievement_local),
 
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),

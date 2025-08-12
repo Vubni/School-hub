@@ -105,6 +105,9 @@ class ClubGetReturnSchema(Schema):
 class ClubJoinSchema(Schema):
     club_id = fields.Int(required=True, description="id клуба")
 
+class AchievementsLocalSchema(Schema):
+    club_id = fields.Int(required=True, description="id клуба")
+
 class ClubEditSchema(Schema):
     club_id = fields.Int(required=True, description="id клуба")
     title = fields.Str(required=True, description="Название клуба")

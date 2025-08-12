@@ -294,3 +294,18 @@ async def achievements_global():
             "status": "error",
             "message": str(e)
         }
+    
+async def achievements_local(club_id:int):
+    try:
+        async with Database() as db:
+            achievements = await db.execute_all("SELECT title, description, xp FROM achievements WHERE global=false")
+            xp = (await db.execute("SELECT xp FROM clubs WHERE id=$1", (club_id,)))["xp"]
+        for a in achievements:
+            a["need_xp"] = a["xp"]
+            a["xp"] = xp
+        return achievements
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
