@@ -128,6 +128,13 @@ class TeachersSchema(Schema):
     name = fields.Str(description="ФИО учителя")
     subject = fields.Str(description="Предмет, который ведёт")
 
+class AchievementsSchema(Schema):
+    title = fields.Str(description="Название достижения")
+    description = fields.Str(description="Описание достижения")
+    image_path = fields.Str(description="Путь к изображению достижения")
+    date = fields.Date(description="Дата события")
+    url = fields.Str(description="Ссылка на основную информацию новости или т.п.")
+
 
 
     

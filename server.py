@@ -7,9 +7,42 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (auth, settings, schedule, clubs, others)
+from api import (auth, settings, schedule, clubs, others, achievements)
 
 from database.functions import init_db
+
+
+async def handle_get_file(request: web.Request) -> web.Response:
+    # Определяем путь к статическим файлам
+    static_dir = "static"
+    path = request.match_info['path']
+    
+    # Создаем безопасный путь и проверяем выход за пределы директории
+    safe_path = os.path.normpath(path).lstrip('/')
+    full_path = os.path.join(static_dir, safe_path)
+    abs_static = os.path.abspath(static_dir)
+    abs_target = os.path.abspath(full_path)
+    
+    # Защита от path traversal
+    if not abs_target.startswith(abs_static):
+        return web.HTTPNotFound()
+    
+    # Если файл существует - отдаем его
+    if os.path.isfile(abs_target):
+        return web.FileResponse(abs_target)
+    
+    # Проверяем наличие расширения у запрошенного пути
+    last_part = safe_path.split('/')[-1] if safe_path else ""
+    if '.' in last_part:
+        return web.HTTPNotFound()
+    
+    # Отдаем index.html для SPA роутинга
+    index_path = os.path.join(static_dir, "index.html")
+    if os.path.isfile(index_path):
+        return web.FileResponse(index_path)
+    
+    return web.HTTPNotFound()
+
 
 if __name__ == "__main__":
     asyncio.run(init_db())
@@ -74,11 +107,11 @@ if __name__ == "__main__":
         web.get(prefix + 'settings/telegram/connect', settings.telegram_connect),
         web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
 
-        # web.delete(prefix + 'achievements', achievements.get),
+        web.get(prefix + 'news/achievements', achievements.get),
 
-        web.delete(prefix + 'teachers', others.teachers),
+        web.get(prefix + 'teachers', others.teachers),
         
-        # web.get('/{path:.*}', handle_get_file)
+        web.get('/{path:.*}', handle_get_file)
     ]
     
     for route in routes:
