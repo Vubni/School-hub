@@ -13,7 +13,7 @@ from dateutil import parser
 from datetime import date
 
 @docs(
-    tags=["Achievements"],
+    tags=["News"],
     summary="Получение списка достижений учеников лицея",
     description="Получение списка достижений учеников лицея",
     responses={

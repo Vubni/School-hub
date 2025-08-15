@@ -6,7 +6,7 @@ from aiohttp_apispec import (
 )
 from config import logger
 from docs import schems as sh
-from functions import events as func
+from functions import olympiads as func
 import core
 from api import validate
 from dateutil import parser
@@ -14,10 +14,10 @@ from datetime import date
 
 @docs(
     tags=["News"],
-    summary="Получение списка прошедшых мероприятий лицея",
-    description="Получение списка прошедшых мероприятий лицея",
+    summary="Получение списка будущих олимпиад",
+    description="Получение списка будущих олимпиад",
     responses={
-        200: {"description": "Список прошедшых мероприятий лицея", "schema": sh.AchievementsSchema(many=True)},
+        200: {"description": "Список будущих олимпиад", "schema": sh.AchievementsSchema(many=True)},
         400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
         401: {"description": "Авторизация не выполнена"},
         500: {"description": "Server-side error (Ошибка на стороне сервера)"}

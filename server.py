@@ -109,6 +109,7 @@ if __name__ == "__main__":
 
         web.get(prefix + 'news/achievements', achievements.get),
         web.get(prefix + 'news/events', events.get),
+        web.get(prefix + 'news/olympiads', olympiads.get),
 
         web.get(prefix + 'teachers', others.teachers),
         
