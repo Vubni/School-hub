@@ -7,7 +7,7 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (auth, settings, schedule, clubs, others, achievements, events)
+from api import (auth, settings, schedule, clubs, others, achievements, events, olympiads)
 
 from database.functions import init_db
 
