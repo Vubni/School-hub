@@ -124,6 +124,11 @@ class AchievementsGlobalReturnSchema(Schema):
     xp = fields.Str(description="Текущий набранный опыт")
     need_xp = fields.Str(description="Необходимый опыт")
 
+class TeachersSchema(Schema):
+    name = fields.Str(description="ФИО учителя")
+    subject = fields.Str(description="Предмет, который ведёт")
+
+
 
     
 class ErrorDetailSchema(Schema):

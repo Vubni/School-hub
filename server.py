@@ -7,7 +7,7 @@ from aiohttp_apispec import (
 import aiohttp_cors
 from config import logger
 import asyncio
-from api import (auth, settings, schedule, clubs)
+from api import (auth, settings, schedule, clubs, others)
 
 from database.functions import init_db
 
@@ -64,7 +64,6 @@ if __name__ == "__main__":
         # web.get(prefix + 'clubs/office/my', clubs.office_my),
         # web.delete(prefix + 'clubs/office/free', clubs.office_free),
 
-
         web.get(prefix + "achievement/global", clubs.achievements_global),
         web.get(prefix + "achievement/local", clubs.achievements_local),
 
@@ -74,6 +73,10 @@ if __name__ == "__main__":
         web.post(prefix + 'settings/email/set', settings.set_email),
         web.get(prefix + 'settings/telegram/connect', settings.telegram_connect),
         web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
+
+        # web.delete(prefix + 'achievements', achievements.get),
+
+        web.delete(prefix + 'teachers', others.teachers),
         
         # web.get('/{path:.*}', handle_get_file)
     ]
