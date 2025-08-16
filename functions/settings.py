@@ -2,10 +2,19 @@ from database.database import Database
 from aiohttp import web
 from functions import mail
 from core import generate_unique_code
+from config import bot
 
 async def info(user_id:int):
     async with Database() as db:
         res = await db.execute("SELECT login, email, name, surname, class_number, class_letter, telegram_id FROM users WHERE id=$1", (user_id,))
+    if res["telegram_id"]:
+        try:
+            res["telegram_name"] = (await bot.get_chat(res["telegram_id"])).username
+        except:
+            res["telegram_name"] = ""
+    else:
+        res["telegram_name"] = ""
+    del res["telegram_id"]
     return res
 
 async def set_login(user_id:int, loign_new:str):
