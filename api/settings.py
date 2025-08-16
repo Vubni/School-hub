@@ -201,7 +201,9 @@ async def telegram_connect(request: web.Request) -> web.Response:
         user_id = await core.check_authorization(request)
         if not isinstance(user_id, int):
             return user_id
-        return web.json_response({"url": f"https://t.me/schoolhub_ru_bot?start=connect_{user_id}"}, status=200)
+        auth_header = request.headers.get('Authorization')
+        token = auth_header.split()[1]
+        return web.json_response({"url": f"https://t.me/schoolhub_ru_bot?start=connect_{token}"}, status=200)
         # return await func.telegram_sign(user_id)
     except Exception as e:
         logger.error("profile error: ", e)
