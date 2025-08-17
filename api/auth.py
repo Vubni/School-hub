@@ -79,7 +79,7 @@ async def email_verify(request: web.Request) -> web.Response:
         500: {"description": "Server-side error (Ошибка на стороне сервера)"}
     }
 )
-async def telegram_connect(request: web.Request) -> web.Response:
+async def telegram_url(request: web.Request) -> web.Response:
     try:
         token = core.generate_unique_code()
         return web.json_response({"url": f"https://t.me/schoolhub_ru_bot?start=auth_{token}", "token": token}, status=200)
@@ -100,7 +100,7 @@ async def telegram_connect(request: web.Request) -> web.Response:
 )
 @request_schema(sh.TokenResponseSchema)
 @validate.validate(validate.Auth_telegram)
-async def telegram_connect(request: web.Request, parsed: validate.Auth_telegram) -> web.Response:
+async def telegram(request: web.Request, parsed: validate.Auth_telegram) -> web.Response:
     try:
         res = func.check_auth_token(parsed.token)
         return res
