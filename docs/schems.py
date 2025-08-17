@@ -135,6 +135,10 @@ class AchievementsSchema(Schema):
     date = fields.Date(description="Дата события")
     url = fields.Str(description="Ссылка на основную информацию новости или т.п.")
 
+class TelegramAuthSchema(Schema):
+    url = fields.Str(description="Ссылка на тг бота")
+    token = fields.Str(description="Токен для проверки прошла ли авторизация в боте")
+
 
 
     
