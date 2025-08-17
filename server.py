@@ -78,6 +78,8 @@ if __name__ == "__main__":
     routes = [
         # web.post(prefix + 'reg', auth.register),
         web.post(prefix + 'auth', auth.auth),
+        web.get(prefix + 'auth/telegram/url', auth.telegram_url),
+        web.post(prefix + 'auth/telegram', auth.telegram),
         web.post(prefix + 'email', auth.email_verify),
         
         web.get(prefix + 'schedule', schedule.info),

@@ -75,6 +75,11 @@ class Auth(BaseModel):
             raise ValueError('Identifier cannot exceed 256 characters')
         return v
     
+
+class Auth_telegram(BaseModel):
+    token: str
+
+    
 class Login_patch(BaseModel):
     login: str
     

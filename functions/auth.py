@@ -43,3 +43,12 @@ async def auth(identifier:str, password:str) -> str:
         code = generate_unique_code()
         await db.execute("INSERT INTO tokens (user_id, token) VALUES ($1, $2)", (user_id, code,))
     return web.json_response({"token": code}, status=200)
+
+async def check_auth_token(token:str):
+    async with Database() as db:
+        res = await db.execute("SELECT user_id FROM auth_token WHERE token = $1", (token,))
+        if not res:
+            return web.Response(status=401)
+        await db.execute("INSERT INTO tokens (user_id, token) VALUES ($1, $2)", (res["user_id"], token,))
+        await db.execute("DELETE FROM auth_tokens WHERE token=$1", (token,))
+    return web.json_response({"token": token}, status=200)

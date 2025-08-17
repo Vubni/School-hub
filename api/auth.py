@@ -6,7 +6,7 @@ from aiohttp_apispec import (
 )
 from config import logger
 from docs import schems as sh
-from functions import auth as func_db
+from functions import auth as func
 from api import validate
 import core
 from functions import mail
@@ -29,7 +29,7 @@ async def auth(request: web.Request, parsed : validate.Auth) -> web.Response:
         identifier = parsed.identifier
         password = parsed.password
         
-        code = await func_db.auth(identifier, password)
+        code = await func.auth(identifier, password)
         return code
     except Exception as e:
         logger.error("auth error: ", e)
@@ -60,10 +60,50 @@ async def email_verify(request: web.Request) -> web.Response:
             return email
         
         try:
-            await func_db.verify_email(email)
+            await func.verify_email(email)
             return web.Response(status=204)
         except:
             return web.Response(status=500)
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+    
+
+@docs(
+    tags=["Auth"],
+    summary="Получение ссылки для авторизации через Telegram аккаунт",
+    description="Получение ссылки для авторизации через Telegram аккаунт.",
+    responses={
+        204: {"description": "Telegram аккаунт успешно привязан", "schema": sh.TelegramConnectSchema},
+        401: {"description": "Авторизация не выполнена"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    }
+)
+async def telegram_connect(request: web.Request) -> web.Response:
+    try:
+        token = core.generate_unique_code()
+        return web.json_response({"url": f"https://t.me/schoolhub_ru_bot?start=auth_{token}", "token": token}, status=200)
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+    
+@docs(
+    tags=["Auth"],
+    summary="Проверка прошла ли авторизация через Telegram успешно",
+    description="Проверка прошла ли авторизация через Telegram успешно.",
+    responses={
+        204: {"description": "Telegram аккаунт успешно привязан", "schema": sh.TelegramConnectSchema},
+        400: {"description": "Код авторизации не передан", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация ещё не выполнена"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    }
+)
+@request_schema(sh.TokenResponseSchema)
+@validate.validate(validate.Auth_telegram)
+async def telegram_connect(request: web.Request, parsed: validate.Auth_telegram) -> web.Response:
+    try:
+        res = func.check_auth_token(parsed.token)
+        return res
     except Exception as e:
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
