@@ -43,3 +43,8 @@ async def set_password(user_id:int, password:str):
             return web.json_response({"name": "login", "error": "The login has already been registered"}, status=409)
         await db.execute("UPDATE users SET login=$2 WHERE id=$1", (user_id, password))
     return web.Response(status=204)
+
+async def telegram_out(user_id:int):
+    async with Database() as db:
+        await db.execute("UPDATE users SET telegram_id=NULL WHERE id=$1", (user_id,))
+    return web.Response(status=204)

@@ -16,7 +16,7 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 DATE_BASE_CONNECT = {"host": os.getenv("DB_IP"), 
              "user": "user", 
              "password": os.getenv("DB_PASSWORD"), 
-             "database": "schoolhub"}
+             "database": "school-hub"}
 
 
 bot = Bot(token=os.getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))

@@ -43,7 +43,7 @@ async def list(user_id: int, type: str, offset: int, limit: int) -> dict:
             elif type == "top":
                 clubs = await db.execute_all(
                     """SELECT id, title, max_members_counts, 
-                          class_limit_min, class_limit_max 
+                          class_limit_min, class_limit_max, xp
                     FROM clubs 
                     ORDER BY xp DESC 
                     LIMIT $1 OFFSET $2""",

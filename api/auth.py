@@ -10,6 +10,7 @@ from functions import auth as func
 from api import validate
 import core
 from functions import mail
+from database.database import Database
 
 @docs(
     tags=["Auth"],
@@ -102,7 +103,7 @@ async def telegram_url(request: web.Request) -> web.Response:
 @validate.validate(validate.Auth_telegram)
 async def telegram(request: web.Request, parsed: validate.Auth_telegram) -> web.Response:
     try:
-        res = func.check_auth_token(parsed.token)
+        res = await func.check_auth_token(parsed.token)
         return res
     except Exception as e:
         logger.error("profile error: ", e)
