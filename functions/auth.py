@@ -62,9 +62,9 @@ async def forgot_password(identifier: str, new_password: str) -> web.Response:
             return web.Response(status=422, text="Email and Telegram account are not linked to the user")
         result = await db.fetchval("INSERT INTO new_password_wait (user_id, new_password) VALUES ($1, $2)", (res["id"], new_password,))
         if res["telegram_id"]:
-            await config.bot.send_message(res["telegram_id"], f"Вы запросили смену пароля. Если это были не вы, просто <b>проигнорируйте</b> это сообщение.\n\nЕсли это были вы, перейдите по ссылке ниже, чтобы подтвердить смену пароля:\nhttps://api.school-hub.ru/auth/forgot_password/confirm?confirm={result['id']}")
+            await config.bot.send_message(res["telegram_id"], f"Вы запросили смену пароля. Если это были не вы, просто <b>проигнорируйте</b> это сообщение.\n\nЕсли это были вы, перейдите по ссылке ниже, чтобы подтвердить смену пароля:\nhttps://api.school-hub.ru/auth/forgot_password/confirm?confirm={result}")
         if res["email"]:
-            mail.send_password_edit(res["email"], f"https://api.school-hub.ru/auth/forgot_password/confirm?confirm={result['id']}")
+            await mail.send_password_edit(res["email"], f"https://api.school-hub.ru/auth/forgot_password/confirm?confirm={result}")
         return web.Response(status=204)
     
 async def forgot_password_confirm(confirm: int) -> web.Response:
