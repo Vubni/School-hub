@@ -239,5 +239,18 @@ async def init_db():
     xp integer NOT NULL DEFAULT 0,
     CONSTRAINT achievements_pkey PRIMARY KEY (id)
 )""")
+            
+            await db.execute("""
+                CREATE TABLE IF NOT EXISTS public.new_password_wait
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 999999999999999999 CACHE 1 ),
+    user_id bigint NOT NULL,
+    new_password text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT new_password_wait_pkey PRIMARY KEY (id),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)""")
         except Exception as e:
             print(f"Ошибка при создании таблицы: {e}")

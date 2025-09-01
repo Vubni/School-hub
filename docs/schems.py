@@ -139,6 +139,9 @@ class TelegramAuthSchema(Schema):
     url = fields.Str(description="Ссылка на тг бота")
     token = fields.Str(description="Токен для проверки прошла ли авторизация в боте")
 
+class ForgotPasswordSchema(Schema):
+    identifier = fields.Str(required=True, description="Логин или email пользователя")
+    new_password = fields.Str(required=True, description="Новый пароль пользователя")
 
 
     

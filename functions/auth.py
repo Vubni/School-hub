@@ -2,6 +2,7 @@ from database.database import Database
 from core import generate_unique_code
 from aiohttp import web
 import config
+from functions import mail
 
 async def verify_email(email):
     async with Database() as db:
@@ -51,3 +52,17 @@ async def check_auth_token(token:str):
             return web.Response(status=401)
         await db.execute("INSERT INTO tokens (user_id, token) VALUES ($1, $2)", (res["user_id"], token,))
     return web.json_response({"token": token}, status=200)
+
+async def forgot_password(identifier: str, new_password: str) -> web.Response:
+    async with Database() as db:
+        res = await db.execute("SELECT id, email, telegram_id FROM users WHERE (email = $1 or login = $1)", (identifier,))
+        if not res:
+            return web.Response(status=401, text="The login information is incorrect")
+        if not res["email"] and not res["telegram_id"]:
+            return web.Response(status=422, text="Email and Telegram account are not linked to the user")
+        result = await db.fetchval("INSERT INTO new_password_wait (user_id, new_password) VALUES ($1, $2)", (res["id"], new_password,))
+        if res["telegram_id"]:
+            await config.bot.send_message(res["telegram_id"], f"Вы запросили смену пароля. Если это были не вы, просто <b>проигнорируйте</b> это сообщение.\n\nЕсли это были вы, перейдите по ссылке ниже, чтобы подтвердить смену пароля:\nhttps://api.school-hub.ru/auth/forgot_password/confirm?user_id={result['id']}")
+        if res["email"]:
+            mail.send_password_edit(res["email"], f"https://api.school-hub.ru/auth/forgot_password/confirm?user_id={result['id']}")
+        return web.Response(status=204)

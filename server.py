@@ -81,6 +81,8 @@ if __name__ == "__main__":
         web.get(prefix + 'auth/telegram/url', auth.telegram_url),
         web.post(prefix + 'auth/telegram', auth.telegram),
         web.post(prefix + 'email', auth.email_verify),
+        web.post(prefix + 'auth/forgot_password', auth.forgot_password),
+        web.get(prefix + 'auth/forgot_password/confirm', auth.forgot_password_confirm),
         
         web.get(prefix + 'schedule', schedule.info),
         

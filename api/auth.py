@@ -108,3 +108,25 @@ async def telegram(request: web.Request, parsed: validate.Auth_telegram) -> web.
     except Exception as e:
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
+    
+@docs(
+    tags=["Auth"],
+    summary="Отправка запроса на изменение пароля",
+    description="Отправка запроса на изменение пароля.",
+    responses={
+        204: {"description": "Запрос на изменение пароля отправлен успешно"},
+        400: {"description": "Код авторизации не передан", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена"},
+        422: {"description": "Почта и телеграм аккаунт не привязаны к пользователю"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    }
+)
+@request_schema(sh.ForgotPasswordSchema)
+@validate.validate(validate.Forgot_password)
+async def forgot_password(request: web.Request, parsed: validate.Forgot_password) -> web.Response:
+    try:
+        res = await func.forgot_password(parsed.identifier, parsed.new_password)
+        return res
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))

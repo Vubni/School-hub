@@ -246,3 +246,7 @@ class Club_edit(BaseModel):
             raise ValueError("Telegram URL is too short")
             
         return v
+    
+class Forgot_password(BaseModel):
+    identifier: str
+    new_password: str

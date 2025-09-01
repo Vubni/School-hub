@@ -16,6 +16,12 @@ async def send_email_edit(to_email: str, code: str) -> bool:
                     f"https://api.school-hub.ru/verify-email?token={code}",
                     'Изменение почты | Школа+')
 
+async def send_password_edit(to_email: str, url: str):
+    await send_mail(to_email, 
+                    'data/edit_password.html', 
+                    url,
+                    'Изменение пароля | Школа+')
+
 async def send_mail(to_email: str, mail_path:str, url:str, title:str):
     smtp_config = {
         'hostname': EMAIL_HOSTNAME,
