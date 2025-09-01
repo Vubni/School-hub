@@ -13,8 +13,8 @@ from config import logger, EMAIL_PASSWORD, EMAIL_USERNAME, EMAIL_PORT, EMAIL_HOS
 async def send_email_edit(to_email: str, code: str) -> bool:
     await send_mail(to_email, 
                     'data/mail.html', 
-                    f"https://online-postupishka.ru/verify-email?token={code}",
-                    'Изменение почты | school-hub.ru')
+                    f"https://api.school-hub.ru/verify-email?token={code}",
+                    'Изменение почты | Школа+')
 
 async def send_mail(to_email: str, mail_path:str, url:str, title:str):
     smtp_config = {

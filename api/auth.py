@@ -93,7 +93,7 @@ async def telegram_url(request: web.Request) -> web.Response:
     summary="Проверка прошла ли авторизация через Telegram успешно",
     description="Проверка прошла ли авторизация через Telegram успешно.",
     responses={
-        204: {"description": "Авторизация через Telegram аккаунт выполнена", "schema": sh.TokenResponseSchema},
+        200: {"description": "Авторизация через Telegram аккаунт выполнена", "schema": sh.TokenResponseSchema},
         400: {"description": "Код авторизации не передан", "schema": sh.Error400Schema},
         401: {"description": "Авторизация ещё не выполнена"},
         500: {"description": "Server-side error (Ошибка на стороне сервера)"}
