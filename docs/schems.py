@@ -143,6 +143,9 @@ class ForgotPasswordSchema(Schema):
     identifier = fields.Str(required=True, description="Логин или email пользователя")
     new_password = fields.Str(required=True, description="Новый пароль пользователя")
 
+class ForgotPasswordConfirmSchema(Schema):
+    confirm = fields.Int(required=True)
+
 
     
 class ErrorDetailSchema(Schema):

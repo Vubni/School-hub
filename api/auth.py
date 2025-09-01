@@ -130,3 +130,24 @@ async def forgot_password(request: web.Request, parsed: validate.Forgot_password
     except Exception as e:
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
+    
+@docs(
+    tags=["Auth"],
+    summary="Подтверждение изменения пароля ",
+    description="Подтверждение изменения пароля (Фонтенд не использует метод, пользователь обращается напрямую по ссылке из письма или телеграма).",
+    responses={
+        204: {"description": "Пароль успешно изменён"},
+        400: {"description": "Код авторизации не передан", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    }
+)
+@request_schema(sh.ForgotPasswordConfirmSchema)
+@validate.validate(validate.Forgot_password_confirm)
+async def forgot_password_confirm(request: web.Request, parsed: validate.Forgot_password_confirm) -> web.Response:
+    try:
+        res = await func.forgot_password_confirm(parsed.confirm)
+        return res
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))

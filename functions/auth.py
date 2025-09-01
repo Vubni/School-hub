@@ -62,7 +62,16 @@ async def forgot_password(identifier: str, new_password: str) -> web.Response:
             return web.Response(status=422, text="Email and Telegram account are not linked to the user")
         result = await db.fetchval("INSERT INTO new_password_wait (user_id, new_password) VALUES ($1, $2)", (res["id"], new_password,))
         if res["telegram_id"]:
-            await config.bot.send_message(res["telegram_id"], f"Вы запросили смену пароля. Если это были не вы, просто <b>проигнорируйте</b> это сообщение.\n\nЕсли это были вы, перейдите по ссылке ниже, чтобы подтвердить смену пароля:\nhttps://api.school-hub.ru/auth/forgot_password/confirm?user_id={result['id']}")
+            await config.bot.send_message(res["telegram_id"], f"Вы запросили смену пароля. Если это были не вы, просто <b>проигнорируйте</b> это сообщение.\n\nЕсли это были вы, перейдите по ссылке ниже, чтобы подтвердить смену пароля:\nhttps://api.school-hub.ru/auth/forgot_password/confirm?confirm={result['id']}")
         if res["email"]:
-            mail.send_password_edit(res["email"], f"https://api.school-hub.ru/auth/forgot_password/confirm?user_id={result['id']}")
+            mail.send_password_edit(res["email"], f"https://api.school-hub.ru/auth/forgot_password/confirm?confirm={result['id']}")
+        return web.Response(status=204)
+    
+async def forgot_password_confirm(confirm: int) -> web.Response:
+    async with Database() as db:
+        res = await db.execute("SELECT user_id, new_password FROM new_password_wait WHERE id = $1", (confirm,))
+        if not res:
+            return web.Response(status=400, text="Invalid confirmation code")
+        await db.execute("UPDATE users SET password=$1 WHERE id=$2", (res["new_password"], res["user_id"],))
+        await db.execute("DELETE FROM new_password_wait WHERE id=$1", (confirm,))
         return web.Response(status=204)

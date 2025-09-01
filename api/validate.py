@@ -250,3 +250,6 @@ class Club_edit(BaseModel):
 class Forgot_password(BaseModel):
     identifier: str
     new_password: str
+    
+class Forgot_password_confirm(BaseModel):
+    confirm: int
