@@ -253,3 +253,6 @@ class Forgot_password(BaseModel):
     
 class Forgot_password_confirm(BaseModel):
     confirm: int
+    
+class Email_verify_confirm(BaseModel):
+    token: str

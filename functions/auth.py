@@ -75,3 +75,12 @@ async def forgot_password_confirm(confirm: int) -> web.Response:
         await db.execute("UPDATE users SET password=$1 WHERE id=$2", (res["new_password"], res["user_id"],))
         await db.execute("DELETE FROM new_password_wait WHERE id=$1", (confirm,))
         return web.Response(status=204)
+    
+async def email_verify_confirm(token: str) -> web.Response:
+    async with Database() as db:
+        res = await db.execute("SELECT user_id, new_email FROM new_email WHERE token = $1", (token,))
+        if not res:
+            return web.Response(status=400, text="Invalid confirmation code")
+        await db.execute("UPDATE users SET email=$1 WHERE id=$2", (res["new_email"], res["user_id"],))
+        await db.execute("DELETE FROM new_email WHERE token=$1", (token,))
+        return web.Response(status=204)

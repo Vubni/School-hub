@@ -28,6 +28,9 @@ class PasswordEditSchema(Schema):
 class TelegramConnectSchema(Schema):
     url = fields.Str(required=True, description="Ссылка для привязки аккаунта Telegram.")
     
+class EmailVerifyConfirmSchema(Schema):
+    token = fields.Str(required=True)
+    
 
 class ScheduleGetSchema(Schema):
     date = fields.Date(required=True, description="Дата на которую получают расписание.")

@@ -133,7 +133,7 @@ async def forgot_password(request: web.Request, parsed: validate.Forgot_password
     
 @docs(
     tags=["Auth"],
-    summary="Подтверждение изменения пароля ",
+    summary="Подтверждение изменения пароля",
     description="Подтверждение изменения пароля (Фонтенд не использует метод, пользователь обращается напрямую по ссылке из письма или телеграма).",
     responses={
         204: {"description": "Пароль успешно изменён"},
@@ -147,6 +147,27 @@ async def forgot_password(request: web.Request, parsed: validate.Forgot_password
 async def forgot_password_confirm(request: web.Request, parsed: validate.Forgot_password_confirm) -> web.Response:
     try:
         res = await func.forgot_password_confirm(parsed.confirm)
+        return res
+    except Exception as e:
+        logger.error("profile error: ", e)
+        return web.Response(status=500, text=str(e))
+    
+@docs(
+    tags=["Auth"],
+    summary="Подтверждение изменения почты",
+    description="Подтверждение изменения почты (Фонтенд не использует метод, пользователь обращается напрямую по ссылке из письма или телеграма).",
+    responses={
+        204: {"description": "Почта успешно изменена"},
+        400: {"description": "Код авторизации не передан", "schema": sh.Error400Schema},
+        401: {"description": "Авторизация не выполнена"},
+        500: {"description": "Server-side error (Ошибка на стороне сервера)"}
+    }
+)
+@request_schema(sh.EmailVerifyConfirmSchema)
+@validate.validate(validate.Email_verify_confirm)
+async def email_verify_confirm(request: web.Request, parsed: validate.Email_verify_confirm) -> web.Response:
+    try:
+        res = await func.email_verify_confirm(parsed.token)
         return res
     except Exception as e:
         logger.error("profile error: ", e)
