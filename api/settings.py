@@ -184,8 +184,6 @@ async def telegram_out(request: web.Request) -> web.Response:
         204: {"description": "Telegram аккаунт успешно привязан", "schema": sh.TelegramConnectSchema},
         400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
         401: {"description": "Авторизация не выполнена"},
-        409: {"description": "Новые логин или почта заняты", "schema": sh.AlreadyBeenTaken},
-        422: {"description": "Переданный email не соответствует стандартам электронной почты"},
         500: {"description": "Server-side error (Ошибка на стороне сервера)"}
     },
     parameters=[{
