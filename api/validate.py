@@ -101,7 +101,8 @@ class Email_patch(BaseModel):
         return v
     
 class Password_patch(BaseModel):
-    password: str
+    password_old: str
+    password_new: str
     
 class Schedule_get(BaseModel):
     date: str

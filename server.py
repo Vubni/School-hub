@@ -81,7 +81,7 @@ if __name__ == "__main__":
         web.get(prefix + 'auth/telegram/url', auth.telegram_url),
         web.post(prefix + 'auth/telegram', auth.telegram),
         web.post(prefix + 'email', auth.email_verify),
-        web.post(prefix + 'verify-email', auth.email_verify_confirm),
+        web.get(prefix + 'verify-email', auth.email_verify_confirm),
         web.post(prefix + 'auth/forgot_password', auth.forgot_password),
         web.get(prefix + 'auth/forgot_password/confirm', auth.forgot_password_confirm),
         
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
         web.get(prefix + 'settings/info', settings.info),
         web.post(prefix + 'settings/login/set', settings.set_login),
-        web.post(prefix + 'settings/password/set', settings.set_password),
+        web.post(prefix + 'settings/password/change', settings.set_password),
         web.post(prefix + 'settings/email/set', settings.set_email),
         web.get(prefix + 'settings/telegram/connect', settings.telegram_connect),
         web.delete(prefix + 'settings/telegram/out', settings.telegram_out),
