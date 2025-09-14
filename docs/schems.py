@@ -23,8 +23,8 @@ class EmailEditSchema(Schema):
     email = fields.Str(required=True, description="email пользователя. До 256 символов")
     
 class PasswordEditSchema(Schema):
-    password_old = fields.Str(required=True, description="password пользователя.")
-    password_new = fields.Str(required=True, description="password пользователя.")
+    current_password = fields.Str(required=True, description="password пользователя.")
+    new_password = fields.Str(required=True, description="password пользователя.")
     
 class TelegramConnectSchema(Schema):
     url = fields.Str(required=True, description="Ссылка для привязки аккаунта Telegram.")

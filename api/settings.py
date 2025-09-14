@@ -138,7 +138,7 @@ async def set_password(request: web.Request, parsed : validate.Password_patch) -
         if not isinstance(user_id, int):
             return user_id
         
-        return await func.set_password(user_id, parsed.password_old, parsed.password_new)
+        return await func.set_password(user_id, parsed.current_password, parsed.new_password)
     except Exception as e:
         logger.error("profile error: ", e)
         return web.Response(status=500, text=str(e))
