@@ -22,6 +22,9 @@ DATE_BASE_CONNECT = {"host": os.getenv("DB_IP"),
 bot = Bot(token=os.getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
 
+with open('bad_words.txt', 'r', encoding='utf-8') as file:
+    bad_words = set(line.strip().lower() for line in file)
+
 
 
 import logging

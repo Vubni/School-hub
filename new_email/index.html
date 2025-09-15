@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Почта успешно подтверждена | Школа+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes checkmark {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes particles {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0c1a2d 0%, #0d2444 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: rgba(30, 30, 46, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid rgba(79, 156, 255, 0.2);
+            animation: fadeIn 0.8s ease-out;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0479FD 0%, #0450a5 100%);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: particles 5s infinite linear;
+        }
+        
+        .school-name {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .content {
+            padding: 35px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #0479FD 0%, #0450a5 100%);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: checkmark 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                       float 3s ease-in-out infinite 1s;
+            box-shadow: 0 0 30px rgba(4, 121, 253, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .checkmark span {
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        p:nth-child(2) { animation-delay: 0.3s; }
+        p:nth-child(3) { animation-delay: 0.6s; }
+        p:nth-child(4) { animation-delay: 1s; }
+        
+        .instructions {
+            background: rgba(4, 121, 253, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            border-left: 4px solid #0479FD;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #79B4FF;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .instructions li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .support {
+            color: #79B4FF;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .support:hover {
+            color: #a8d0ff;
+            transform: translateY(-2px);
+        }
+        
+        .support::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #a8d0ff;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .support:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .footer {
+            padding: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(20, 20, 35, 0.7);
+        }
+        
+        .footer a {
+            color: #79B4FF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer a:hover {
+            color: #a8d0ff;
+            text-decoration: underline;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            color: #79B4FF;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #a8d0ff;
+            transform: translateY(-3px);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            opacity: 0.7;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        .telegram-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0088cc 0%, #005c8a 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+        }
+        
+        .telegram-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 136, 204, 0.4);
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .content {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .checkmark {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .checkmark span {
+                font-size: 40px;
+            }
+            
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Particles -->
+            <div class="particle" style="--tx: 20px; --ty: 30px; top: 10%; left: 20%;"></div>
+            <div class="particle" style="--tx: -15px; --ty: 40px; top: 20%; left: 80%;"></div>
+            <div class="particle" style="--tx: 25px; --ty: 35px; top: 50%; left: 40%;"></div>
+            <div class="particle" style="--tx: -20px; --ty: 25px; top: 70%; left: 60%;"></div>
+            
+            <div class="school-name">Школа+</div>
+            <h1>Почта успешно подтверждена</h1>
+        </div>
+        <div class="content">
+            <!-- Confetti -->
+            <div class="confetti" style="background: #FF5252; left: 10%; animation-delay: 0.5s;"></div>
+            <div class="confetti" style="background: #FFD740; left: 20%; animation-delay: 1.2s;"></div>
+            <div class="confetti" style="background: #7C4DFF; left: 30%; animation-delay: 0.8s;"></div>
+            <div class="confetti" style="background: #448AFF; left: 40%; animation-delay: 1.5s;"></div>
+            <div class="confetti" style="background: #69F0AE; left: 60%; animation-delay: 0.3s;"></div>
+            <div class="confetti" style="background: #FF4081; left: 80%; animation-delay: 1.7s;"></div>
+            <div class="confetti" style="background: #FFC107; left: 90%; animation-delay: 0.7s;"></div>
+            
+            <div class="checkmark">
+                <span>✓</span>
+            </div>
+            <p>Ваш адрес электронной почты был успешно подтверждён!</p>
+            <p>Теперь вы можете пользоваться всеми возможностями системы Школа+.</p>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-lightbulb"></i> Что дальше?</h3>
+                <ol>
+                    <li>Закройте эту страницу и вернитесь в приложение</li>
+                    <li>Обновите страницу профиля в приложении, если это необходимо</li>
+                    <li>Наслаждайтесь полным доступом ко всем функциям Школа+</li>
+                </ol>
+            </div>
+            
+            <p>Если у вас возникли проблемы, пожалуйста, обратитесь в <span class="support" onclick="openSupport()">службу поддержки</span>.</p>
+            
+            <a href="https://t.me/egor_vubni2" class="telegram-button" target="_blank">
+                <i class="fab fa-telegram"></i> Написать в Telegram
+            </a>
+        </div>
+        <div class="footer">
+            <p style="margin: 0 0 10px 0;">© 2025 Школа+. Все права защищены.</p>
+            <p style="margin: 0 0 15px 0;">Если у вас возникли вопросы, обращайтесь в нашу <span class="support" onclick="openSupport()">службу поддержки</span>.</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-vk"></i></a>
+                <a href="https://t.me/egor_vubni2" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция для открытия поддержки
+        function openSupport() {
+            window.open('https://t.me/egor_vubni2', '_blank');
+        }
+        
+        // Добавляем дополнительные частицы в header
+        function createParticles() {
+            const header = document.querySelector('.header');
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.setProperty('--tx', (Math.random() * 40 - 20) + 'px');
+                particle.style.setProperty('--ty', (Math.random() * 40 + 20) + 'px');
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                header.appendChild(particle);
+            }
+        }
+        
+        // Создаем частицы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', createParticles);
+    </script>
+</body>
+</html>

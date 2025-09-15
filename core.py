@@ -3,10 +3,13 @@ import string, asyncio
 import re, threading
 import dns.resolver
 from aiohttp import web
-from config import logger
+from config import logger, bad_words
 from database import functions as func_db
 from functools import wraps
 
+def contains_bad_text(text: str) -> bool:
+    words = text.lower().split()
+    return any(word in bad_words for word in words)
 
 async def check_authorization(request:web.Request):
     try:

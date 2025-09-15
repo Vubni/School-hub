@@ -113,6 +113,10 @@ async def new(request: web.Request, parsed : validate.Club_new) -> web.Response:
         if not isinstance(user_id, int):
             return user_id
         
+        if (core.contains_bad_text(parsed.title) or
+            core.contains_bad_text(parsed.description)):
+            return web.json_response({"error": "Недопустимый текст в названии или описании клуба."}, status=409)
+        
         result = await func.create(user_id, parsed.title, parsed.description,
                              parsed.administration, parsed.max_members_counts,
                              parsed.class_limit_min, parsed.class_limit_max,

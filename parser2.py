@@ -1,7 +1,6 @@
 import re
 import asyncio
 from openpyxl import load_workbook
-from datetime import time
 from database.database import Database  # Импортируйте ваш класс Database
 
 async def parse_excel_and_save_to_db(file_path: str):
@@ -29,95 +28,98 @@ async def parse_excel_and_save_to_db(file_path: str):
     
     current_day = None
     lessons_data = []
-    processed_lessons = set()  # Для отслеживания уже обработанных уроков
+    processed_lessons = set()
     
-    # Сначала соберем информацию о классах и их колонках
+    # Собираем информацию о всех классах
     class_columns = {}
-    for col in range(3, sheet.max_column + 1, 2):
+    for col in range(3, sheet.max_column + 1):
         class_name = sheet.cell(row=3, column=col).value
         if class_name and class_name not in ['№', 'Каб/Предмет']:
-            # Извлекаем номер и букву класса
+            # Пробуем оба варианта парсинга названия класса
             match = re.match(r'(\d+)([А-Я]+)', str(class_name))
+            if not match:
+                match = re.match(r'(\d+)([А-ЯA-Z]+)', str(class_name).replace(' ', ''))
             if match:
                 class_number = int(match.group(1))
                 class_letter = match.group(2)
                 class_columns[col] = (class_number, class_letter)
     
-    # Проходим по всем строкам в листе
-    for row in range(1, sheet.max_row + 1):
-        # Проверяем ячейку в колонке A на наличие названия дня
+    # Проходим по всем строкам
+    for row in range(4, sheet.max_row + 1):  # Начинаем с 4 строки, где начинаются данные
+        # Определяем текущий день
         day_cell = sheet.cell(row=row, column=1).value
-        if day_cell and day_cell in days_map:
-            current_day = days_map[day_cell]
-            continue
+        if day_cell:
+            day_str = str(day_cell).strip().upper()
+            if day_str in days_map:
+                current_day = days_map[day_str]
+                continue
         
         if not current_day:
             continue
         
-        # Получаем время из колонки B
-        time_value = sheet.cell(row=row, column=2).value
-        if not time_value:
-            continue
+        # Получаем время урока (для проверки наличия времени)
+        time_cell = sheet.cell(row=row, column=2).value
         
-        # Обрабатываем все классы
+        # Для каждого класса
         for col, (class_number, class_letter) in class_columns.items():
-            # Получаем номер урока
-            lesson_number_cell = sheet.cell(row=row, column=col).value
-            
-            # Пропускаем если нет номера урока или это не число
-            if not lesson_number_cell or not isinstance(lesson_number_cell, (int, float)):
+            # Пропускаем пустые ячейки
+            if not sheet.cell(row=row, column=col).value:
                 continue
+                
+            # Определяем номер урока
+            lesson_number = None
             
-            lesson_number = int(lesson_number_cell)
+            # СПОСОБ 1: Ищем номер урока в текущей ячейке
+            try:
+                lesson_number = int(sheet.cell(row=row, column=col).value)
+            except (ValueError, TypeError):
+                pass
+                
+            # СПОСОБ 2: Ищем номер урока в ячейке слева
+            if lesson_number is None and col > 3:
+                try:
+                    lesson_number = int(sheet.cell(row=row, column=col-1).value)
+                except (ValueError, TypeError):
+                    pass
             
-            # Создаем уникальный идентификатор урока
-            lesson_id = f"{class_number}_{class_letter}_{current_day}_{lesson_number}"
+            # СПОСОБ 3: Ищем номер урока в ячейке выше
+            if lesson_number is None and row > 4:
+                try:
+                    lesson_number = int(sheet.cell(row=row-1, column=col).value)
+                except (ValueError, TypeError):
+                    pass
             
-            # Пропускаем если уже обработали этот урок
-            if lesson_id in processed_lessons:
+            # Если номер урока не найден, пропускаем эту ячейку
+            if lesson_number is None:
                 continue
-            
-            # Пытаемся найти предмет в разных местах
+                
+            # Ищем предмет в текущей и соседних ячейках
             title = None
+            search_cells = [
+                (row, col),      # Текущая ячейка
+                (row, col+1),    # Справа
+                (row+1, col),    # Снизу
+                (row+1, col+1),  # Снизу справа
+                (row-1, col),    # Сверху
+                (row-1, col+1),  # Сверху справа
+            ]
             
-            # 1. Попробуем найти в следующей колонке той же строки
-            title_cell = sheet.cell(row=row, column=col + 1).value
-            if title_cell and any(subject in str(title_cell) for subject in subjects):
-                title = str(title_cell).strip()
+            for r, c in search_cells:
+                if 1 <= r <= sheet.max_row and 1 <= c <= sheet.max_column:
+                    cell_value = sheet.cell(row=r, column=c).value
+                    if cell_value and any(subject in str(cell_value) for subject in subjects):
+                        title = str(cell_value).strip()
+                        break
             
-            # 2. Если не нашли, попробуем в следующей строке, той же колонки+1
-            if not title and row + 1 <= sheet.max_row:
-                title_cell = sheet.cell(row=row + 1, column=col + 1).value
-                if title_cell and any(subject in str(title_cell) for subject in subjects):
-                    title = str(title_cell).strip()
-            
-            # 3. Если все еще не нашли, попробуем в строке ниже, но той же колонки
-            if not title and row + 1 <= sheet.max_row:
-                title_cell = sheet.cell(row=row + 1, column=col).value
-                if title_cell and any(subject in str(title_cell) for subject in subjects):
-                    title = str(title_cell).strip()
-            
-            # 4. Если все еще не нашли, попробуем в строке выше, следующей колонки
-            if not title and row - 1 >= 1:
-                title_cell = sheet.cell(row=row - 1, column=col + 1).value
-                if title_cell and any(subject in str(title_cell) for subject in subjects):
-                    title = str(title_cell).strip()
-            
-            # Пропускаем если не нашли название предмета
-            if not title:
-                continue
-            
-            # Добавляем данные урока
-            lessons_data.append((
-                class_number,
-                class_letter,
-                current_day,
-                title,
-                lesson_number
-            ))
-            
-            # Помечаем урок как обработанный
-            processed_lessons.add(lesson_id)
+            # Если нашли предмет, добавляем урок
+            if title:
+                lesson_id = f"{class_number}_{class_letter}_{current_day}_{lesson_number}"
+                
+                if lesson_id not in processed_lessons:
+                    lessons_data.append((
+                        class_number, class_letter, current_day, title, lesson_number
+                    ))
+                    processed_lessons.add(lesson_id)
     
     # Сохранение в базу данных
     async with Database() as db:
@@ -125,68 +127,10 @@ async def parse_excel_and_save_to_db(file_path: str):
         insert_sql = """
             INSERT INTO lessons (class_number, class_letter, day_number, title, lesson_number)
             VALUES ($1, $2, $3, $4, $5)"""
-        
         await db.executemany(insert_sql, lessons_data)
 
-# Запуск парсинга
 async def main():
     await parse_excel_and_save_to_db('Временное расписание уроков 2025-2026.xlsx')
 
 if __name__ == '__main__':
     asyncio.run(main())
-import pandas as pd
-from database.database import Database
-import asyncio
-
-async def export_users_to_excel(db: Database, filename: str = "users.xlsx"):
-    """
-    Экспортирует данные пользователей в Excel с разделением по классам
-    """
-    # Получаем все данные из таблицы users (без переименования в SQL)
-    users = await db.execute_all("""
-        SELECT name, surname, login, password, class_number, class_letter 
-        FROM users 
-        ORDER BY class_number, class_letter
-    """)
-
-    if not users:
-        print("Не найдено пользователей для экспорта")
-        return False
-
-    # Создаем DataFrame из всех пользователей
-    df = pd.DataFrame(users)
-    
-    # Переименовываем столбцы на русский язык
-    df = df.rename(columns={
-        'name': 'Имя',
-        'surname': 'Фамилия',
-        'login': 'Логин',
-        'password': 'Пароль',
-        'class_number': 'Класс',
-        'class_letter': 'Буква'
-    })
-    
-    # Создаем Excel-файл
-    with pd.ExcelWriter(filename, engine='openpyxl') as writer:
-        # Группируем по классу и записываем каждый класс на отдельный лист
-        nmb = 0
-        for (class_num, class_letter), group in df.groupby(['Класс', 'Буква']):
-            class_str = f"{class_num}{class_letter}"
-            nmb += 1
-            # Записываем данные на лист
-            group.to_excel(
-                writer,
-                sheet_name=class_str,
-                index=False
-            )
-        print(nmb)
-
-    print(f"Данные успешно экспортированы в файл {filename}")
-    return True
-
-async def main():
-    db = Database()
-    async with db:
-        await export_users_to_excel(db, "users1.xlsx")
-
-asyncio.run(main())

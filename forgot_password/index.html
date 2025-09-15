@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пароль успешно изменён | Школа+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #0479FD;
+            --primary-light: #4da3ff;
+            --primary-dark: #0368e0;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-border: #333333;
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0b0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--dark-bg);
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(4, 121, 253, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(4, 121, 253, 0.1) 0%, transparent 25%);
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            background-color: var(--dark-card);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            opacity: 0;
+            animation: pulse 4s infinite;
+        }
+        
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: white;
+            transform: scaleX(0);
+            animation: scaleIn 0.8s 0.5s ease forwards;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .content {
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: scaleIn 0.6s 0.3s ease both, pulse 2s 1.5s infinite;
+            box-shadow: 0 0 20px rgba(4, 121, 253, 0.4);
+        }
+        
+        .checkmark i {
+            color: white;
+            font-size: 50px;
+        }
+        
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            animation: circleExpand 1.5s ease-out;
+            opacity: 0;
+        }
+        
+        .success-text {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 26px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .info-box {
+            background: rgba(4, 121, 253, 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            animation: fadeIn 1s 0.8s both;
+        }
+        
+        .info-box p {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .support {
+            color: var(--primary-light);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .support:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .support i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0088cc, #00a8e8);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+        
+        .telegram-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.4);
+        }
+        
+        .telegram-link i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .footer {
+            padding: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--dark-border);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .footer a i {
+            margin-right: 6px;
+        }
+        
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(4, 121, 253, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(4, 121, 253, 0.4);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(4, 121, 253, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(4, 121, 253, 0);
+            }
+        }
+        
+        @keyframes circleExpand {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .content {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .checkmark {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .checkmark i {
+                font-size: 40px;
+            }
+            
+            .success-text {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">Школа+</div>
+            <h1>Пароль успешно изменён</h1>
+        </div>
+        <div class="content">
+            <div class="checkmark">
+                <i class="fas fa-check"></i>
+            </div>
+            
+            <div class="success-text">Изменение пароля завершено!</div>
+            
+            <p>Ваш пароль был успешно изменён. Теперь вы можете войти в систему с новым паролем.</p>
+            
+            <div class="info-box">
+                <p><i class="fas fa-lightbulb" style="color: #ffcc00;"></i> Рекомендуем использовать надёжный пароль, содержащий буквы, цифры и специальные символы.</p>
+                <p><i class="fas fa-shield-alt" style="color: var(--primary-light);"></i> Никогда не передавайте свой пароль третьим лицам.</p>
+            </div>
+            
+            <p>Если у вас возникли проблемы с доступом к аккаунту, пожалуйста, обратитесь в нашу службу поддержки:</p>
+            
+            <a href="https://t.me/egor_vubni2" class="telegram-link" target="_blank">
+                <i class="fab fa-telegram-plane"></i> Написать в Telegram
+            </a>
+            
+            <p>Или нажмите на ссылку: <a href="https://t.me/egor_vubni2" class="support" target="_blank"><i class="fab fa-telegram"></i> @egor_vubni2</a></p>
+        </div>
+        <div class="footer">
+            <p style="margin: 0 0 10px 0;">© 2025 Школа+. Все права защищены.</p>
+            <p style="margin: 0;">Если у вас возникли вопросы, обращайтесь в нашу <a href="https://t.me/egor_vubni2" target="_blank"><i class="fab fa-telegram"></i> службу поддержки</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        // Создание частиц для фона
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 15 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 15;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}vw`;
+                particle.style.top = `${posY}vh`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Добавляем обработчики для всех ссылок поддержки
+            document.querySelectorAll('.support').forEach(link => {
+                link.addEventListener('click', function() {
+                    window.open('https://t.me/egor_vubni2', '_blank');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
