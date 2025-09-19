@@ -319,7 +319,7 @@ async def edit(request: web.Request, parsed : validate.Club_edit) -> web.Respons
     summary="Удалить клуб",
     description="Удалить клуб\nУдалить клуб может только участник с переменной admin=true (то есть админ)\nДля доступа требуется Bearer-токен в заголовке Authorization",
     responses={
-        200: {"description": "Удалить клуб", "schema": sh.ClubGetReturnSchema},
+        200: {"description": "Удалить клуб"},
         400: {"description": "Отсутствует один из параметров", "schema": sh.Error400Schema},
         401: {"description": "Авторизация не выполнена или авторизация выполнена от участника клуба не являющегося админом"},
         403: {"description": "Единственный администратор не может покинуть клуб."},
@@ -338,9 +338,10 @@ async def edit(request: web.Request, parsed : validate.Club_edit) -> web.Respons
 async def delete(request: web.Request, parsed : validate.Club_delete) -> web.Response:
     try:
         user_id = await core.check_authorization(request)
+        print(user_id)
         if not isinstance(user_id, int):
             return user_id
-        
+        print(parsed.club_id)
         result = await func.delete(user_id, parsed.club_id)
         
         if isinstance(result, dict):
