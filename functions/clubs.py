@@ -250,7 +250,7 @@ async def delete(user_id, club_id):
 async def edit(user_id, club_id, title, description, max_members_counts, class_limit_min, class_limit_max, telegram_url):
     try:
         async with Database() as db:
-            res = await db.execute("SELECT 1 FROM users WHERE user_id=$1 and admin=true", (user_id,))
+            res = await db.execute("SELECT 1 FROM club_members WHERE user_id=$1 and admin=true", (user_id,))
             if not res:
                 return web.json_response({"name": "user_id", "message": "User is not admin."}, status=401)
             if title:
